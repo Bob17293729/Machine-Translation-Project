@@ -1,0 +1,77 @@
+# Machine Translation Project Configuration
+
+# Data Configuration
+data:
+  train_file: "data/translation2019zh_train.json"
+  valid_file: "data/translation2019zh_valid.json"
+  test_file: "data/translation2019zh_valid.json"
+  max_dataset_size: 220000
+  train_set_size: 200000
+  valid_set_size: 20000
+  max_input_length: 128
+  max_target_length: 128
+
+# Model Configuration
+model:
+  type: "transformer"  # Options: "rnn", "transformer", "pretrained"
+  
+  # RNN Model Config
+  rnn:
+    input_dim: 10000
+    output_dim: 10000
+    emb_dim: 256
+    hid_dim: 512
+    n_layers: 2
+    dropout: 0.5
+    teacher_forcing_ratio: 0.5
+  
+  # Transformer Model Config
+  transformer:
+    input_dim: 23500
+    output_dim: 23000
+    d_model: 256
+    nhead: 8
+    num_encoder_layers: 6
+    num_decoder_layers: 6
+    dim_feedforward: 2048
+    dropout: 0.1
+    max_seq_length: 128
+  
+  # Pretrained Model Config
+  pretrained:
+    model_name: "Helsinki-NLP/opus-mt-zh-en"
+    fine_tune: true
+
+# Training Configuration
+training:
+  batch_size: 32
+  num_epochs: 20
+  learning_rate: 1e-4
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  warmup_steps: 1000
+  save_dir: "checkpoints"
+  log_dir: "logs"
+  eval_steps: 1000
+  save_steps: 5000
+  early_stopping_patience: 5
+
+# Evaluation Configuration
+evaluation:
+  metrics: ["bleu", "rouge"]
+  beam_size: 5
+  max_length: 128
+
+# System Configuration
+system:
+  device: "cuda"  # "cuda" or "cpu"
+  num_workers: 4
+  seed: 42
+  mixed_precision: false
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/training.log"
+
